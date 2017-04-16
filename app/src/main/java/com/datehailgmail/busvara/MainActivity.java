@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements RoutingListener, 
         setContentView(R.layout.activity_home);
         ButterKnife.inject(this);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setTitle(Html.fromHtml("<font color=\"white\">" + getString(R.string.app_name) + "</font>"));
 
         polylines = new ArrayList<>();
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -511,7 +512,7 @@ public class MainActivity extends AppCompatActivity implements RoutingListener, 
                 polyOptions.addAll(route.get(i).getPoints());
                 Polyline polyline = map.addPolyline(polyOptions);
                 polylines.add(polyline);
-                double distance = ((double) route.get(i).getDistanceValue() / 1000) ;
+                double distance = ((double) route.get(i).getDistanceValue() / 1000);
                 double fare = distance * 1.7;
                 if (fare < 7)
                     openBottomSheet((new DecimalFormat("##.##").format(distance)) + " KM", "(minimum) 7 TK", starting.getText().toString(), destination.getText().toString());

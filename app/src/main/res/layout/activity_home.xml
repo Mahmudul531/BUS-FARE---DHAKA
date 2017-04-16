@@ -4,8 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include layout="@layout/content_input" />
-
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -19,5 +17,7 @@
             android:layout_height="wrap_content" />
 
     </FrameLayout>
+
+    <include layout="@layout/content_input" />
 </RelativeLayout>
 
