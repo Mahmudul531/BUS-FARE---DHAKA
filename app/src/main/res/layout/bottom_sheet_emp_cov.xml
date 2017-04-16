@@ -123,13 +123,12 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/hint_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
             android:maxLines="2"
             android:paddingBottom="6dp"
-            android:text="** Fare is Approximate. Per KM 7 TK and Minimum 7 TK"
-            android:textColor="#f40b0b"
 
             android:textSize="14dp" />
 

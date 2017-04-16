@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Test</string>
+    <string name="app_name">বাস ভাড়া - BUS FARE</string>
+    <string name="link_terms_condition"><b> Fare is Approximate.
+         <a style="color: #FF4081">Per KM 1.70 TK and Minimum 7 TK </a>
+        <a style="color: #303F9F" href="http://www.brta.gov.bd/newsite/en/public-bus-fare-of-dhaka-metro-area/">Learn more</a>
+    </b>
+</string>
 </resources>

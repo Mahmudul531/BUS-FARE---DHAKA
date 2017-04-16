@@ -9,11 +9,14 @@ import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -98,11 +101,14 @@ public class MainActivity extends AppCompatActivity implements RoutingListener, 
                         @Override
                         public void onLocationChanged(Location location) {
 
-                            CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
-                            CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
+                            if (isFirstTime) {
+                                CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
+                                CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
 
-                            map.moveCamera(center);
-                            map.animateCamera(zoom);
+                                map.moveCamera(center);
+                                map.animateCamera(zoom);
+                                isFirstTime = false;
+                            }
                         }
 
                         @Override
@@ -230,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements RoutingListener, 
         });
 
 
-        CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(18.013610, -77.498803));
+        CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(23.7806286, 90.2793688));//23.7806286,90.2793688
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
 
         map.moveCamera(center);
@@ -505,9 +511,12 @@ public class MainActivity extends AppCompatActivity implements RoutingListener, 
                 polyOptions.addAll(route.get(i).getPoints());
                 Polyline polyline = map.addPolyline(polyOptions);
                 polylines.add(polyline);
-                double distance = (double)route.get(i).getDistanceValue() / 1000;
-                double fare = distance * 7;
-                openBottomSheet((new DecimalFormat("##.##").format(distance)), (new DecimalFormat("##.##").format(fare)), starting.getText().toString(), destination.getText().toString());
+                double distance = ((double) route.get(i).getDistanceValue() / 1000) ;
+                double fare = distance * 1.7;
+                if (fare < 7)
+                    openBottomSheet((new DecimalFormat("##.##").format(distance)) + " KM", "(minimum) 7 TK", starting.getText().toString(), destination.getText().toString());
+                else
+                    openBottomSheet((new DecimalFormat("##.##").format(distance)) + " KM", (new DecimalFormat("##.##").format(fare)) + " TK", starting.getText().toString(), destination.getText().toString());
 
 
             }
@@ -550,8 +559,9 @@ public class MainActivity extends AppCompatActivity implements RoutingListener, 
 
         View view = getLayoutInflater().inflate(R.layout.bottom_sheet_emp_cov, null);
 
-        TextView tv_distance, tv_fare, tv_from, tv_to;
+        TextView tv_distance, tv_fare, tv_from, tv_to, hint_text;
         Button btnDone;
+        hint_text = (TextView) view.findViewById(R.id.hint_text);
         tv_distance = (TextView) view.findViewById(R.id.tv_distance);
         tv_fare = (TextView) view.findViewById(R.id.tv_fare);
         tv_from = (TextView) view.findViewById(R.id.tv_from);
@@ -562,6 +572,13 @@ public class MainActivity extends AppCompatActivity implements RoutingListener, 
         tv_fare.setText(Fare);
         tv_from.setText(FROM);
         tv_to.setText(TO);
+        if (Build.VERSION.SDK_INT >= 24) {
+            hint_text.setText(Html.fromHtml(getResources().getString(R.string.link_terms_condition), Html.FROM_HTML_MODE_LEGACY));
+        } else {
+            hint_text.setText(Html.fromHtml(getResources().getString(R.string.link_terms_condition)));
+
+        }
+        hint_text.setMovementMethod(LinkMovementMethod.getInstance());
         final Dialog mBottomSheetDialog = new Dialog(MainActivity.this,
                 R.style.MaterialDialogSheet);
         mBottomSheetDialog.setContentView(view);
